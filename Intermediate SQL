@@ -1,0 +1,55 @@
+-- Intermediate SQL Queries for the Countries Table
+-- Aggregation, grouping, subqueries and filtering
+
+-- 1. Retrieve the total number of countries per continent.
+SELECT Continent, COUNT(*) AS TotalCountries
+FROM Countries
+GROUP BY Continent;
+
+-- 2. Find the average population of countries with more than 10 million people.
+SELECT AVG(Population) AS AvgPopulation
+FROM Countries
+WHERE Population > 10;
+
+-- 3. Get the top 3 countries by population.
+SELECT CountryName, Population
+FROM Countries
+ORDER BY Population DESC
+LIMIT 3;
+
+-- 4. List all countries that use the 'Euro' currency.
+SELECT CountryName
+FROM Countries
+WHERE Currency = 'Euro';
+
+-- 5. Retrieve the total population for each continent.
+SELECT Continent, SUM(Population) AS TotalPopulation
+FROM Countries
+GROUP BY Continent;
+
+-- 6. Calculate the average population of countries on each continent.
+SELECT Continent, AVG(Population) AS AvgPopulation
+FROM Countries
+GROUP BY Continent;
+
+-- 7. Find the countries with a population below the average population of all countries.
+SELECT CountryName, Population
+FROM Countries
+WHERE Population < (SELECT AVG(Population) FROM Countries);
+
+-- 8. Get all continents that have more than 5 countries.
+SELECT Continent, COUNT(*) AS CountryCount
+FROM Countries
+GROUP BY Continent
+HAVING CountryCount > 5;
+
+-- 9. Retrieve the largest country by population in each continent.
+SELECT Continent, CountryName, MAX(Population) AS LargestPopulation
+FROM Countries
+GROUP BY Continent, CountryName
+ORDER BY Continent, LargestPopulation DESC;
+
+-- 10. Find countries whose phone code is in the range 30-50.
+SELECT CountryName, PhoneCode
+FROM Countries
+WHERE PhoneCode BETWEEN 30 AND 50;
