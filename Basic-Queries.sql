@@ -23,9 +23,3 @@ SELECT CountryName, Currency FROM Countries;
 
 -- 8. Find the country with the highest population
 SELECT CountryName FROM Countries ORDER BY Population DESC LIMIT 1;
-
--- 9. Group countries by continent and count them
-SELECT Continent, COUNT(*) AS CountryCount FROM Countries GROUP BY Continent;
-
--- 10. Select countries and their phone codes for countries with 'Dollar' as currency
-SELECT CountryName, PhoneCode FROM Countries WHERE Currency LIKE '%Dollar%';
