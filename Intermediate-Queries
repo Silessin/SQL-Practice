@@ -1,55 +1,54 @@
 -- Intermediate SQL Queries for the Countries Table
--- Aggregation, grouping, subqueries and filtering
+-- Aggregation, grouping, subqueries, filtering, and different SQL functions
 
--- 1. Retrieve the total number of countries per continent.
-SELECT Continent, COUNT(*) AS TotalCountries
-FROM Countries
-GROUP BY Continent;
+-- 1. Retrieve the distinct number of continents.
+SELECT DISTINCT Continent
+FROM Countries;
 
--- 2. Find the average population of countries with more than 10 million people.
-SELECT AVG(Population) AS AvgPopulation
+-- 2. Get countries with a population greater than 10 million and their rank by population.
+SELECT CountryName, Population, RANK() OVER (ORDER BY Population DESC) AS PopulationRank
 FROM Countries
 WHERE Population > 10;
 
--- 3. Get the top 3 countries by population.
+-- 3. Select countries ordered by population, skipping the top 3 largest.
 SELECT CountryName, Population
 FROM Countries
 ORDER BY Population DESC
-LIMIT 3;
+OFFSET 3 ROWS;
 
--- 4. List all countries that use the 'Euro' currency.
-SELECT CountryName
-FROM Countries
-WHERE Currency = 'Euro';
+-- 4. Retrieve the median population across all countries (using window functions).
+SELECT CountryName, Population, NTILE(2) OVER (ORDER BY Population) AS PopulationMedian
+FROM Countries;
 
--- 5. Retrieve the total population for each continent.
-SELECT Continent, SUM(Population) AS TotalPopulation
-FROM Countries
-GROUP BY Continent;
+-- 5. Select the smallest country by population per continent.
+SELECT CountryName, Continent, MIN(Population) OVER (PARTITION BY Continent) AS SmallestPopulation
+FROM Countries;
 
--- 6. Calculate the average population of countries on each continent.
-SELECT Continent, AVG(Population) AS AvgPopulation
-FROM Countries
-GROUP BY Continent;
-
--- 7. Find the countries with a population below the average population of all countries.
-SELECT CountryName, Population
-FROM Countries
-WHERE Population < (SELECT AVG(Population) FROM Countries);
-
--- 8. Get all continents that have more than 5 countries.
-SELECT Continent, COUNT(*) AS CountryCount
-FROM Countries
-GROUP BY Continent
-HAVING CountryCount > 5;
-
--- 9. Retrieve the largest country by population in each continent.
-SELECT Continent, CountryName, MAX(Population) AS LargestPopulation
-FROM Countries
-GROUP BY Continent, CountryName
-ORDER BY Continent, LargestPopulation DESC;
-
--- 10. Find countries whose phone code is in the range 30-50.
+-- 6. List countries whose phone code starts with '3'.
 SELECT CountryName, PhoneCode
 FROM Countries
-WHERE PhoneCode BETWEEN 30 AND 50;
+WHERE PhoneCode LIKE '3%';
+
+-- 7. Retrieve countries that do not have 'Euro' or 'Dollar' as currency.
+SELECT CountryName, Currency
+FROM Countries
+WHERE Currency NOT IN ('Euro', 'Dollar');
+
+-- 8. Select countries where population is between 1 and 10 million.
+SELECT CountryName, Population
+FROM Countries
+WHERE Population BETWEEN 1 AND 10;
+
+-- 9. Find countries and the continent where the population is within 10% of the highest population.
+SELECT CountryName, Continent
+FROM Countries
+WHERE Population >= (SELECT MAX(Population) * 0.9 FROM Countries);
+
+-- 10. Get the sum of populations for continents with more than 3 countries.
+SELECT Continent, SUM(Population) AS TotalPopulation
+FROM Countries
+GROUP BY Continent
+HAVING COUNT(*) > 3;
+
+
+
