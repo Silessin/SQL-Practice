@@ -43,7 +43,7 @@ WHERE Population >= (SELECT MAX(Population) * 0.1 FROM Countries);
 -- 8. Get the number of countries on each continent with number of countries greater than 30
 SELECT Continent, COUNT(CountryName) AS NumberOfCountries
 FROM Countries
-GROUP BY Continent;
+GROUP BY Continent
 HAVING COUNT(CountryName) > 30;
 
 
