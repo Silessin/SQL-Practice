@@ -23,27 +23,28 @@ ORDER BY Continent;
 -- 4. List countries whose phone code starts with '3'.
 SELECT CountryName, PhoneCode
 FROM Countries
-WHERE PhoneCode LIKE '3%';
+WHERE PhoneCode LIKE '+3%';
 
--- 5. Retrieve countries that do not have 'Euro' or 'Dollar' as currency.
-SELECT CountryName, Currency
+-- 5. Count all the countries that do not use 'Euro' or 'Dollar' as currency.
+SELECT COUNT(*) AS CountryCount
 FROM Countries
-WHERE Currency NOT IN ('Euro', 'Dollar');
+WHERE Currency <> 'Euro' AND Currency <> 'Dollar';
 
 -- 6. Select countries where population is between 1 and 10 million.
 SELECT CountryName, Population
 FROM Countries
 WHERE Population BETWEEN 1 AND 10;
 
--- 7. Find countries and the continent where the population is within 10% of the highest population.
-SELECT CountryName, Continent
+-- 7. Find countries and the continent where the population is within 90% of the highest population (greater than 144.10 mln)
+SELECT CountryName, Continent, Population
 FROM Countries
-WHERE Population >= (SELECT MAX(Population) * 0.9 FROM Countries);
+WHERE Population >= (SELECT MAX(Population) * 0.1 FROM Countries);
 
--- 8. Get the sum of populations for continents with more than 3 countries.
-SELECT Continent, SUM(Population) AS TotalPopulation
+-- 8. Get the number of countries on each continent with number of countries greater than 30
+SELECT Continent, COUNT(CountryName) AS NumberOfCountries
 FROM Countries
-GROUP BY Continent
-HAVING COUNT(*) > 3;
+GROUP BY Continent;
+HAVING COUNT(CountryName) > 30;
+
 
 
