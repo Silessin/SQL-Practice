@@ -44,7 +44,8 @@ WHERE Population >= (SELECT MAX(Population) * 0.1 FROM Countries);
 SELECT Continent, COUNT(CountryName) AS NumberOfCountries
 FROM Countries
 GROUP BY Continent
-HAVING COUNT(CountryName) > 30;
+HAVING COUNT(CountryName) > 30
+ORDER BY NumberOfCountries DESC;
 
 
 
